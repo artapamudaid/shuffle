@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siapa Duluan Ya?</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/851712c570.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="content">
+        <div class="mx-5 my-5">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <form id="shuffle_form" onsubmit="shuffle(event)">
+                    <div class="mb-3">
+                        <label for="people" class="form-label">Nama:</label>
+                        <div id="p_scents_people">
+                            <p>
+                                <input type="text" id="people" class="form-control" placeholder="Contoh : Arta">
+                            </p>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-success" id="addScnt_people"><i class="fa fa-plus"></i> <b>
+                                Tambah Baris</b></a>
+                    </div>
+                    <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-refresh"></i> Acak</button>
+                </form>
+            </div>
+            <div class="col-md-6 col-sm-12">    
+                <div class="mb-3">
+                    <h5>Urutan Presentasi</h5>
+                </div>
+                <div class="mb-3">
+                    <ol id="people-list"></ol>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.4.1.js"></script>
+    <script>
+        $(function () {
+            var scntDiv = $('#p_scents_people');
+            var i = $('#p_scents_people p').size() + 1;
+
+            $("#addScnt_people").click(function () {
+                $('<p><input type="text" id="people" class="form-control" placeholder="Contoh: Arta"><a href="#" class="btn btn-sm btn-danger remScnt_people"><i class="fa fa-remove"></i> Hapus Baris</a></p>')
+                    .appendTo(scntDiv);
+                i++;
+                return false;
+            });
+
+            $(document).on("click", ".remScnt_people", function () {
+                if (i > 2) {
+                    $(this).parents('p').remove();
+                    i--;
+                }
+                return false;
+            });
+        });
+    </script>
+    <script>
+        function shuffle(event) {
+            event.preventDefault();
+            removeListItem();
+
+            const people = document.querySelectorAll('#people');
+            let data     = [];
+
+            for (let i = 0; i < people.length; i++) {
+                data.push(people[i].value);
+            }
+
+            for (let i = data.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [data[i], data[j]] = [data[j], data[i]];
+            }
+
+            let list = document.getElementById("people-list");
+            for (let i = 0; i < data.length; i++) {
+                let listItem = document.createElement("li");
+                listItem.innerText = data[i];
+                list.appendChild(listItem);
+            }
+        }
+    </script>
+    <script>
+        function removeListItem() {
+            let list = document.getElementById("people-list");
+            while (list.firstChild) {
+                list.removeChild(list.firstChild);
+            }
+        }
+    </script>
+</body>
+
+</html>
