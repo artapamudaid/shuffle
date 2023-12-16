@@ -19,18 +19,12 @@
                 <form id="shuffle_form" onsubmit="shuffle(event)">
                     <div class="mb-3">
                         <label for="people" class="form-label">Nama:</label>
-                        <div id="p_scents_people">
-                            <p>
-                                <input type="text" id="people" class="form-control" placeholder="Contoh : Arta">
-                            </p>
-                        </div>
-                        <a href="#" class="btn btn-sm btn-success" id="addScnt_people"><i class="fa fa-plus"></i> <b>
-                                Tambah Baris</b></a>
+                        <textarea name="people" id="people" class="form-control" rows="5" placeholder="Contoh : Arta, Tri, Pamuda"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-refresh"></i> Acak</button>
-                </form>
             </div>
             <div class="col-md-6 col-sm-12">    
+                <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-refresh"></i> Acak</button>
+            </form>
                 <div class="mb-3">
                     <h5>Urutan Presentasi</h5>
                 </div>
@@ -47,50 +41,47 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
     <script src="https://code.jquery.com/jquery-migrate-3.4.1.js"></script>
-    <script>
-        $(function () {
-            var scntDiv = $('#p_scents_people');
-            var i = $('#p_scents_people p').size() + 1;
-
-            $("#addScnt_people").click(function () {
-                $('<p><input type="text" id="people" class="form-control" placeholder="Contoh: Arta"><a href="#" class="btn btn-sm btn-danger remScnt_people"><i class="fa fa-remove"></i> Hapus Baris</a></p>')
-                    .appendTo(scntDiv);
-                i++;
-                return false;
-            });
-
-            $(document).on("click", ".remScnt_people", function () {
-                if (i > 2) {
-                    $(this).parents('p').remove();
-                    i--;
-                }
-                return false;
-            });
-        });
-    </script>
+    
     <script>
         function shuffle(event) {
             event.preventDefault();
             removeListItem();
 
-            const people = document.querySelectorAll('#people');
-            let data     = [];
+            const peopleInput = document.getElementById('people');
+            let data = [];
 
-            for (let i = 0; i < people.length; i++) {
-                data.push(people[i].value);
+            // Retrieve the value of the input
+            const peopleValue = peopleInput.value;
+
+            // Split the input value into an array using ", " as the delimiter
+            const people = peopleValue.split(",");
+
+            // Trim whitespace around each element
+            const trimmedPeople = people.map(function(element) {
+                return element.trim();
+            });
+
+            // Push trimmed values into the data array
+            for (let i = 0; i < trimmedPeople.length; i++) {
+                data.push(trimmedPeople[i]);
             }
 
+            // Shuffle the data array (Fisher-Yates algorithm)
             for (let i = data.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [data[i], data[j]] = [data[j], data[i]];
             }
 
+            // Append shuffled data to the people-list
             let list = document.getElementById("people-list");
+            list.innerHTML = ''; // Clear previous list items
+
             for (let i = 0; i < data.length; i++) {
                 let listItem = document.createElement("li");
                 listItem.innerText = data[i];
                 list.appendChild(listItem);
             }
+
         }
     </script>
     <script>
